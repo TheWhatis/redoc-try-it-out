@@ -17,19 +17,28 @@ export class AuthBtn {
 
     public static cfg:AuthBtnConfig;
 
-    public static get $element():JQuery {
+    public static get $element(): JQuery {
         return $(`.${AuthBtn.cfg.className}`);
     }
 
     public static init(): void {
-
         if ( ! SwaggerWrapper.hasAuth ) {
             return;
         }
 
-        const $authBtn = $(`<button type="button" class="${AuthBtn.cfg.className}">${AuthBtn.cfg.text}</button>`);
+        const className = AuthBtn.cfg.className + ' ' + (
+            AuthBtn.cfg?.options.className || ''
+        );
+
+        const text = AuthBtn.cfg?.options.text
+            || AuthBtn.cfg.text;
+
+        const posSelector = AuthBtn.cfg?.options.posSelector
+            || AuthBtn.cfg.posSelector;
+
+        const $authBtn = $(`<button type="button" class="${className}">${text}</button>`);
         $authBtn.click(authClickHandler);
-        $(AuthBtn.cfg.posSelector).after($authBtn);
+        $(posSelector).after($authBtn);
         SwaggerWrapper.onCloseAuthModal(authCloseClickHandler);
     }
 }
