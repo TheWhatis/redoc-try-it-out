@@ -27,7 +27,7 @@ export class AuthBtn {
             return;
         }
 
-        const $authBtn = $(`<div class="${AuthBtn.cfg.className}">${AuthBtn.cfg.text}</div>`);
+        const $authBtn = $(`<button type="button" class="${AuthBtn.cfg.className}">${AuthBtn.cfg.text}</button>`);
         $authBtn.click(authClickHandler);
         $(AuthBtn.cfg.posSelector).after($authBtn);
         SwaggerWrapper.onCloseAuthModal(authCloseClickHandler);
