@@ -1,5 +1,5 @@
-export abstract class Config<T> {
-    protected readonly options:T;
+export abstract class Config<T extends object> {
+    protected options:T;
 
     public constructor(options: T) {
         this.options = options;

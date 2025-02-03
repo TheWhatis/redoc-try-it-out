@@ -4,35 +4,54 @@ import { Config } from './config';
 export class SwaggerConfig extends Config<SwaggerOptions> implements SwaggerOptions {
 
     private _resolve: CallbackFunction = () => {}; //eslint-disable-line @typescript-eslint/no-empty-function
-    private readonly _onComplete: CallbackFunction = () => {}; //eslint-disable-line @typescript-eslint/no-empty-function
-    public readonly onCompletePromise: Promise<void>;
+    private _onComplete: CallbackFunction = () => {}; //eslint-disable-line @typescript-eslint/no-empty-function
+    public onCompletePromise: Promise<void>;
 
-    private readonly _authorizeBtnSelector: string = '.swagger-ui .auth-wrapper .authorize';
-    private readonly _authorizeDoneBtnSelector: string = '.swagger-ui .auth-btn-wrapper .btn-done';
-    private readonly _authorizeModalCloseBtnSelector: string = '.swagger-ui .dialog-ux .modal-ux-header .close-modal';
-    private readonly _authorizeModalSelector: string = '.swagger-ui .dialog-ux .modal-ux';
-    private readonly _modalOverlaySelector: string = '.swagger-ui .dialog-ux';
+    private _authorizeBtnSelector: string = '.swagger-ui .auth-wrapper .authorize';
+    private _authorizeDoneBtnSelector: string = '.swagger-ui .auth-btn-wrapper .btn-done';
+    private _authorizeModalCloseBtnSelector: string = '.swagger-ui .dialog-ux .modal-ux-header .close-modal';
+    private _authorizeModalSelector: string = '.swagger-ui .dialog-ux .modal-ux';
+    private _modalOverlaySelector: string = '.swagger-ui .dialog-ux';
 
-    private readonly _operationSectionContainerSelector: string = '.swagger-ui .opblock-tag-section';
-    private readonly _operationContainerSelector: string = '.swagger-ui .opblock';
-    private readonly _operationSummaryPatternSelector: string = '.swagger-ui .opblock .opblock-summary-{method} [data-path="{api}"]';
+    private _operationSectionContainerSelector: string = '.swagger-ui .opblock-tag-section';
+    private _operationContainerSelector: string = '.swagger-ui .opblock';
+    private _operationSummaryPatternSelector: string = '.swagger-ui .opblock .opblock-summary-{method} [data-path="{api}"]';
 
-    private readonly _wrapperSelector: string = '.swagger-ui .wrapper';
+    private _wrapperSelector: string = '.swagger-ui .wrapper';
 
-    public readonly dom_id: string = '#swagger-ui';
-    public readonly url: string;
-    public readonly tryItOutEnabled: boolean;
+    public dom_id: string = '#swagger-ui';
+    public url: undefined | string = undefined;
+    public spec: undefined | object = undefined;
+    public tryItOutEnabled: boolean;
 
-    public readonly authModalClass: string = 'auth-modal';
-    public readonly hideClass: string = 'hide';
-    public readonly showClass: string = 'show';
-    public readonly selectedOperationContainerClass: string = 'opened-shadow';
+    public authModalClass: string = 'auth-modal';
+    public hideClass: string = 'hide';
+    public showClass: string = 'show';
+    public selectedOperationContainerClass: string = 'opened-shadow';
 
-    public readonly version: string = '3.48.0';
+    public oauth2RedirectUrl: string = '';
 
-    constructor(options: SwaggerOptions, url: string, tryItOutEnabled: boolean) {
+    public element: string = 'body';
+
+    public version: string = '3.48.0';
+
+    constructor(options: SwaggerOptions, url: string|object, tryItOutEnabled: boolean) {
         super(options);
-        this.url = url;
+
+        if ("oauth2RedirectUrl" in options && options.oauth2RedirectUrl) {
+            this.oauth2RedirectUrl = options.oauth2RedirectUrl;
+        }
+
+        if ("element" in options && options.element) {
+            this.element = options.element;
+        }
+
+        if (typeof url === "object") {
+            this.spec = url;
+        } else {
+            this.url = url;
+        }
+
         this.tryItOutEnabled = tryItOutEnabled;
         this.onCompletePromise = new Promise<void>(resolve => this._resolve = resolve);
     }

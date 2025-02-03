@@ -39,8 +39,20 @@ export class SwaggerWrapper {
         Styler.initSwaggerWrapper();
         loadStylesheet(SwaggerWrapper.cfg.cssUrl);
         await loadScript(SwaggerWrapper.cfg.bundleUrl);
-        $('body').append(`<div id="${SwaggerWrapper.cfg.id}" class="${SwaggerWrapper.cfg.hideClass}"></div>`);
-        SwaggerUIBundle(SwaggerWrapper.cfg);
+
+        $(SwaggerWrapper.cfg.element)
+            .append(`<div id="${SwaggerWrapper.cfg.id}" class="${SwaggerWrapper.cfg.hideClass}"></div>`);
+
+
+        let bundleConfig: { [key: string]: any } = {};
+        for (const key of Object.keys(SwaggerWrapper.cfg)) {
+            const val = SwaggerWrapper.cfg[key];
+            if (val !== undefined) {
+                bundleConfig[key] = val;
+            }
+        }
+
+        SwaggerUIBundle(bundleConfig);
         return SwaggerWrapper.cfg.onCompletePromise;
     }
 
